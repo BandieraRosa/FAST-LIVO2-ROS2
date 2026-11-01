@@ -108,6 +108,7 @@ void LIVMapper::readParameters(rclcpp::Node::SharedPtr &node)
   try_declare.template operator()<int>("preprocess.scan_line",6);
   try_declare.template operator()<int>("preprocess.point_filter_num", 3);
   try_declare.template operator()<bool>("preprocess.feature_extract_enabled", false);
+  try_declare.template operator()<bool>("preprocess.preserve_point_timestamps", false);
 
   try_declare.template operator()<int>("pcd_save.interval", -1);
   try_declare.template operator()<bool>("pcd_save.pcd_save_en", false);
@@ -133,6 +134,7 @@ void LIVMapper::readParameters(rclcpp::Node::SharedPtr &node)
   this->node->get_parameter("common.lidar_en", lidar_en);
   this->node->get_parameter("common.img_topic", img_topic);
   this->node->get_parameter("common.enable_image_processing", enable_image_processing);
+  this->node->get_parameter("preprocess.preserve_point_timestamps", p_pre->preserve_point_timestamps);
 
   this->node->get_parameter("vio.normal_en", normal_en);
   this->node->get_parameter("vio.inverse_composition_en", inverse_composition_en);

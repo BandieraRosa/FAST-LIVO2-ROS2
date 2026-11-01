@@ -173,18 +173,20 @@ void Preprocess::avia_handler(
             msg->points[i].offset_time /
             float(1000000);  // use curvature as time of each laser points
 
-        if (i == 0)
-          pl_full[i].curvature =
-              fabs(pl_full[i].curvature) < 1.0 ? pl_full[i].curvature : 0.0;
-        else {
-          // if(fabs(pl_full[i].curvature - pl_full[i - 1].curvature) > 1.0)
-          // ROS_ERROR("time jump: %f", fabs(pl_full[i].curvature - pl_full[i -
-          // 1].curvature));
-          pl_full[i].curvature =
-              fabs(pl_full[i].curvature - pl_full[i - 1].curvature) < 1.0
-                  ? pl_full[i].curvature
-                  : pl_full[i - 1].curvature +
-                        0.004166667f;  // float(100/24000)
+        if (!preserve_point_timestamps) {
+          if (i == 0)
+            pl_full[i].curvature =
+                fabs(pl_full[i].curvature) < 1.0 ? pl_full[i].curvature : 0.0;
+          else {
+            // if(fabs(pl_full[i].curvature - pl_full[i - 1].curvature) > 1.0)
+            // ROS_ERROR("time jump: %f", fabs(pl_full[i].curvature - pl_full[i -
+            // 1].curvature));
+            pl_full[i].curvature =
+                fabs(pl_full[i].curvature - pl_full[i - 1].curvature) < 1.0
+                    ? pl_full[i].curvature
+                    : pl_full[i - 1].curvature +
+                          0.004166667f;  // float(100/24000)
+          }
         }
 
         if (valid_num % point_filter_num == 0) {

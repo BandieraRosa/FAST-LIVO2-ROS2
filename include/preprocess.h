@@ -158,6 +158,7 @@ class Preprocess {
 
   double blind, blind_sqr;
   bool feature_enabled, given_offset_time;
+  bool preserve_point_timestamps = false;
   std::shared_ptr<rclcpp::Publisher<sensor_msgs::msg::PointCloud2>> pub_full;
   std::shared_ptr<rclcpp::Publisher<sensor_msgs::msg::PointCloud2>> pub_surf;
   std::shared_ptr<rclcpp::Publisher<sensor_msgs::msg::PointCloud2>> pub_corn;
