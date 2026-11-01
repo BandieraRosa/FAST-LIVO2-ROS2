@@ -245,9 +245,9 @@ void LIVMapper::initializeFiles()
     namespace fs = boost::filesystem;
     // Define target directories for Colmap outputs and point clouds
     std::vector<std::string> target_dirs = {
-        std::string(ROOT_DIR) + "Log/Colmap/images",
-        std::string(ROOT_DIR) + "Log/Colmap/sparse/0",
-        std::string(ROOT_DIR) + "Log/PCD"
+        livo_log_directory() + "Colmap/images",
+        livo_log_directory() + "Colmap/sparse/0",
+        livo_log_directory() + "PCD"
     };
 
     // Conditionally clear and recreate directories when both flags are enabled
@@ -293,8 +293,8 @@ void LIVMapper::initializeFiles()
             }
         }
     }
-    if(colmap_output_en) fout_points.open(std::string(ROOT_DIR) + "Log/Colmap/sparse/0/points3D.txt", std::ios::out);
-    if(pcd_save_interval > 0) fout_pcd_pos.open(std::string(ROOT_DIR) + "Log/PCD/scans_pos.json", std::ios::out);
+    if(colmap_output_en) fout_points.open(livo_log_directory() + "Colmap/sparse/0/points3D.txt", std::ios::out);
+    if(pcd_save_interval > 0) fout_pcd_pos.open(livo_log_directory() + "PCD/scans_pos.json", std::ios::out);
     fout_pre.open(DEBUG_FILE_DIR("mat_pre.txt"), std::ios::out);
     fout_out.open(DEBUG_FILE_DIR("mat_out.txt"), std::ios::out);
 }
@@ -547,13 +547,13 @@ void LIVMapper::handleLIO()
     std::ofstream outFile, evoFile;
     if (!pos_opend) 
     {
-      evoFile.open(std::string(ROOT_DIR) + "Log/result/" + seq_name + ".txt", std::ios::out);
+      evoFile.open(livo_log_directory() + "result/" + seq_name + ".txt", std::ios::out);
       pos_opend = true;
       if (!evoFile.is_open()) RCLCPP_ERROR(this->node->get_logger(), "open fail\n");
     } 
     else 
     {
-      evoFile.open(std::string(ROOT_DIR) + "Log/result/" + seq_name + ".txt", std::ios::app);
+      evoFile.open(livo_log_directory() + "result/" + seq_name + ".txt", std::ios::app);
       if (!evoFile.is_open()) RCLCPP_ERROR(this->node->get_logger(), "open fail\n");
     }
     Eigen::Matrix4d outT;
@@ -644,8 +644,8 @@ void LIVMapper::savePCD()
 {
   if (pcd_save_en && (pcl_wait_save->points.size() > 0 || pcl_wait_save_intensity->points.size() > 0) && pcd_save_interval < 0) 
   {
-    std::string raw_points_dir = std::string(ROOT_DIR) + "Log/PCD/all_raw_points.pcd";
-    std::string downsampled_points_dir = std::string(ROOT_DIR) + "Log/PCD/all_downsampled_points.pcd";
+    std::string raw_points_dir = livo_log_directory() + "PCD/all_raw_points.pcd";
+    std::string downsampled_points_dir = livo_log_directory() + "PCD/all_downsampled_points.pcd";
     pcl::PCDWriter pcd_writer;
 
     if (img_en)
@@ -1367,7 +1367,7 @@ void LIVMapper::publish_frame_world(const rclcpp::Publisher<sensor_msgs::msg::Po
     if ((pcl_wait_save->size() > 0 || pcl_wait_save_intensity->size() > 0) && pcd_save_interval > 0 && scan_wait_num >= pcd_save_interval)
     {
       pcd_index++;
-      string all_points_dir(string(string(ROOT_DIR) + "Log/PCD/") + to_string(pcd_index) + string(".pcd"));
+      string all_points_dir(string(livo_log_directory() + "PCD/") + to_string(pcd_index) + string(".pcd"));
       pcl::PCDWriter pcd_writer;
       if (pcd_save_en)
       {

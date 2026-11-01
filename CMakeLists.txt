@@ -151,8 +151,8 @@ ament_target_dependencies(laser_mapping ${dependencies})
 
 # linking libraries or executables to public dependencies
 target_link_libraries(laser_mapping 
-    ${CMAKE_SOURCE_DIR}/../../install/vikit_common/lib/libvikit_common.so 
-    ${CMAKE_SOURCE_DIR}/../../install/vikit_ros/lib/libvikit_ros.so
+    ${vikit_common_LIBRARIES}
+    ${vikit_ros_LIBRARIES}
     ${COMMON_DEPENDENCIES}
 )
 target_link_libraries(vio ${COMMON_DEPENDENCIES})
@@ -212,5 +212,13 @@ ament_export_dependencies(
   OpenCV 
   Sophus
 )
+
+if(BUILD_TESTING)
+  enable_testing()
+  add_executable(test_preprocess_timestamps tests/preprocess_timestamps.cpp)
+  ament_target_dependencies(test_preprocess_timestamps ${dependencies})
+  target_link_libraries(test_preprocess_timestamps pre ${PCL_LIBRARIES} ${COMMON_DEPENDENCIES})
+  add_test(NAME preprocess_timestamps COMMAND test_preprocess_timestamps)
+endif()
 
 ament_package()

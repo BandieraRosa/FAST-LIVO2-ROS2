@@ -17,6 +17,7 @@ which is included as part of this source code package.
 #include <utils/types.h>
 #include <utils/color.h>
 #include <utils/utils.h>
+#include "log_paths.h"
 #include <opencv2/opencv.hpp>
 #include <sensor_msgs/msg/imu.hpp>
 #include <sophus/se3.hpp>
@@ -36,7 +37,7 @@ using namespace Sophus;
 #define SIZE_SMALL (100)
 #define VEC_FROM_ARRAY(v) v[0], v[1], v[2]
 #define MAT_FROM_ARRAY(v) v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7], v[8]
-#define DEBUG_FILE_DIR(name) (string(string(ROOT_DIR) + "Log/" + name))
+#define DEBUG_FILE_DIR(name) (livo_log_directory() + name)
 
 enum LID_TYPE
 {
